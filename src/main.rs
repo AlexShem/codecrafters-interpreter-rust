@@ -3,8 +3,14 @@ use std::fs;
 use std::io::{self, Write};
 
 enum TokenType {
+    /// `(` Left parenthesis
     LeftParen,
+    /// `)` Right parenthesis
     RightParen,
+    /// `{` Left brace
+    LeftBrace,
+    /// `}` Right brace
+    RightBrace,
     Unknown(String),
 }
 
@@ -16,6 +22,8 @@ fn tokenize(content: String) -> Vec<TokenType> {
         let token = match char.to_string().as_str() {
             "(" => TokenType::LeftParen,
             ")" => TokenType::RightParen,
+            "{" => TokenType::LeftBrace,
+            "}" => TokenType::RightBrace,
             ch => TokenType::Unknown(ch.to_string()),
         };
         tokens.push(token);
@@ -46,6 +54,8 @@ fn main() {
                     match token {
                         TokenType::LeftParen => println!("LEFT_PAREN ( null"),
                         TokenType::RightParen => println!("RIGHT_PAREN ) null"),
+                        TokenType::LeftBrace => println!("LEFT_BRACE {{ null"),
+                        TokenType::RightBrace => println!("RIGHT_BRACE }} null"),
                         TokenType::Unknown(ch) => println!("Unknown Token {} null", ch),
                     }
                 }
