@@ -11,6 +11,18 @@ enum TokenType {
     LeftBrace,
     /// `}` Right brace
     RightBrace,
+    /// `,` Comma
+    Comma,
+    /// `.` Dot
+    Dot,
+    /// `-` Minus
+    Minus,
+    /// `+` Plus
+    Plus,
+    /// `;` Semicolon
+    Semicolon,
+    /// `*` Star
+    Star,
     Unknown(String),
 }
 
@@ -24,6 +36,12 @@ fn tokenize(content: String) -> Vec<TokenType> {
             ")" => TokenType::RightParen,
             "{" => TokenType::LeftBrace,
             "}" => TokenType::RightBrace,
+            "," => TokenType::Comma,
+            "." => TokenType::Dot,
+            "-" => TokenType::Minus,
+            "+" => TokenType::Plus,
+            ";" => TokenType::Semicolon,
+            "*" => TokenType::Star,
             ch => TokenType::Unknown(ch.to_string()),
         };
         tokens.push(token);
@@ -56,6 +74,12 @@ fn main() {
                         TokenType::RightParen => println!("RIGHT_PAREN ) null"),
                         TokenType::LeftBrace => println!("LEFT_BRACE {{ null"),
                         TokenType::RightBrace => println!("RIGHT_BRACE }} null"),
+                        TokenType::Comma => println!("COMMA , null"),
+                        TokenType::Dot => println!("DOT . null"),
+                        TokenType::Minus => println!("MINUS - null"),
+                        TokenType::Plus => println!("PLUS + null"),
+                        TokenType::Semicolon => println!("SEMICOLON ; null"),
+                        TokenType::Star => println!("STAR * null"),
                         TokenType::Unknown(ch) => println!("Unknown Token {} null", ch),
                     }
                 }
