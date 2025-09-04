@@ -1,6 +1,6 @@
 mod tokenizer;
 
-use crate::tokenizer::Tokenizer;
+use crate::tokenizer::Scanner;
 use std::env;
 use std::fs;
 use std::io::{self, Write};
@@ -23,11 +23,11 @@ fn main() {
             });
 
             if !file_contents.is_empty() {
-                let mut tokenizer = Tokenizer::new();
-                tokenizer.tokenize_file(file_contents);
-                println!("{}", tokenizer);
+                let mut scanner = Scanner::new(file_contents);
+                scanner.scan_tokens();
+                println!("{}", scanner);
 
-                if tokenizer.has_errors() {
+                if scanner.has_errors() {
                     std::process::exit(65);
                 } else {
                     std::process::exit(0);
