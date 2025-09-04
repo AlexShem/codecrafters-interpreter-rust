@@ -214,6 +214,11 @@ impl Scanner {
                     (TokenType::Slash, None)
                 }
             }
+            " " | "\r" | "\t" => return None,
+            "\n" => {
+                self.line += 1;
+                return None;
+            }
             ch => (TokenType::UnknownToken(ch.to_string()), None),
         };
 
