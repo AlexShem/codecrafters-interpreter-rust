@@ -25,6 +25,10 @@ pub enum TokenType {
     Equal,
     /// `==` Equality Operator
     EqualEqual,
+    /// `!` Negation sign
+    Bang,
+    /// `!=` Inequality operator
+    BangEqual,
     /// End of string
     Eof,
     UnknownToken(String),
@@ -161,6 +165,13 @@ impl Scanner {
                     (TokenType::Equal, None)
                 }
             }
+            "!" => {
+                if self.matches_next("=") {
+                    (TokenType::BangEqual, None)
+                } else {
+                    (TokenType::Bang, None)
+                }
+            }
             ch => (TokenType::UnknownToken(ch.to_string()), None),
         };
 
@@ -203,6 +214,8 @@ impl Display for TokenType {
             TokenType::Star => write!(f, "STAR"),
             TokenType::Equal => write!(f, "EQUAL"),
             TokenType::EqualEqual => write!(f, "EQUAL_EQUAL"),
+            TokenType::Bang => write!(f, "BANG"),
+            TokenType::BangEqual => write!(f, "BANG_EQUAL"),
             TokenType::Eof => write!(f, "EOF"),
             TokenType::UnknownToken(message) => write!(f, "Unknown token {}", message),
         }
