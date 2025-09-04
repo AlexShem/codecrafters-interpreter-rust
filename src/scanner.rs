@@ -33,6 +33,7 @@ pub enum TokenType {
     LessEqual,
     Greater,
     GreaterEqual,
+    Slash,
     /// End of string
     Eof,
     UnknownToken(String),
@@ -129,7 +130,11 @@ impl Scanner {
 
         while !self.is_at_end() {
             self.start = self.current;
-            let (token_type, literal) = self.scan_token();
+            let next_token = self.scan_token();
+            if next_token.is_none() {
+                continue;
+            }
+            let (token_type, literal) = next_token.unwrap();
             if let TokenType::UnknownToken(unknown_token) = token_type {
                 let error = LoxError::new(
                     self.line.clone(),
@@ -149,7 +154,7 @@ impl Scanner {
         }
     }
 
-    fn scan_token(&mut self) -> (TokenType, Option<String>) {
+    fn scan_token(&mut self) -> Option<(TokenType, Option<String>)> {
         self.advance();
         let result = match self.current_char() {
             "(" => (TokenType::LeftParen, None),
@@ -190,10 +195,29 @@ impl Scanner {
                     (TokenType::Greater, None)
                 }
             }
+            "/" => {
+                if self.matches_next("/") {
+                    // while self.source.as_str().chars().nth(self.current as usize).unwrap() != '\n' && !self.is_at_end() {
+                    while !self.is_at_end()
+                        && self
+                            .source
+                            .as_bytes()
+                            .iter()
+                            .nth(self.current as usize)
+                            .unwrap()
+                            != &b'\n'
+                    {
+                        self.advance();
+                    }
+                    return None;
+                } else {
+                    (TokenType::Slash, None)
+                }
+            }
             ch => (TokenType::UnknownToken(ch.to_string()), None),
         };
 
-        result
+        Some(result)
     }
 
     fn matches_next(&mut self, expected: &str) -> bool {
@@ -238,6 +262,7 @@ impl Display for TokenType {
             TokenType::LessEqual => write!(f, "LESS_EQUAL"),
             TokenType::Greater => write!(f, "GREATER"),
             TokenType::GreaterEqual => write!(f, "GREATER_EQUAL"),
+            TokenType::Slash => write!(f, "SLASH"),
             TokenType::Eof => write!(f, "EOF"),
             TokenType::UnknownToken(message) => write!(f, "Unknown token {}", message),
         }
