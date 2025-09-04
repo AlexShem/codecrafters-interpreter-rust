@@ -29,6 +29,10 @@ pub enum TokenType {
     Bang,
     /// `!=` Inequality operator
     BangEqual,
+    Less,
+    LessEqual,
+    Greater,
+    GreaterEqual,
     /// End of string
     Eof,
     UnknownToken(String),
@@ -172,6 +176,20 @@ impl Scanner {
                     (TokenType::Bang, None)
                 }
             }
+            "<" => {
+                if self.matches_next("=") {
+                    (TokenType::LessEqual, None)
+                } else {
+                    (TokenType::Less, None)
+                }
+            }
+            ">" => {
+                if self.matches_next("=") {
+                    (TokenType::GreaterEqual, None)
+                } else {
+                    (TokenType::Greater, None)
+                }
+            }
             ch => (TokenType::UnknownToken(ch.to_string()), None),
         };
 
@@ -216,6 +234,10 @@ impl Display for TokenType {
             TokenType::EqualEqual => write!(f, "EQUAL_EQUAL"),
             TokenType::Bang => write!(f, "BANG"),
             TokenType::BangEqual => write!(f, "BANG_EQUAL"),
+            TokenType::Less => write!(f, "LESS"),
+            TokenType::LessEqual => write!(f, "LESS_EQUAL"),
+            TokenType::Greater => write!(f, "GREATER"),
+            TokenType::GreaterEqual => write!(f, "GREATER_EQUAL"),
             TokenType::Eof => write!(f, "EOF"),
             TokenType::UnknownToken(message) => write!(f, "Unknown token {}", message),
         }
